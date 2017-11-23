@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace SerializePeople
 {
     [Serializable]
-    class Person : IDeserializationCallback
+    public class Person : IDeserializationCallback
     {
         [NonSerialized] private int age;
         public enum Genders { Male, Female }
