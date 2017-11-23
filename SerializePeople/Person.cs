@@ -42,5 +42,10 @@ namespace SerializePeople
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return $"Name: {Name}, Gender: {Gender}, Date of Birth: {BirthDate.ToString("yyyy.MM.dd")}, Age: {Age}";
+        }
     }
 }
