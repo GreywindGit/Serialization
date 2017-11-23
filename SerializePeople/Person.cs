@@ -6,9 +6,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace SerializePeople
 {
     [Serializable]
-    class Person
+    class Person : IDeserializationCallback
     {
-        private int age;
+        [NonSerialized] private int age;
         public enum Genders { Male, Female }
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
@@ -63,6 +63,11 @@ namespace SerializePeople
                 Console.WriteLine("File not found.");
             }
             return person;
+        }
+
+        public void OnDeserialization(object sender)
+        {
+            this.age = DateTime.Now.Year - BirthDate.Year;
         }
 
         public override string ToString()
