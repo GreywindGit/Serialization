@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Reflection;
 
 namespace SerializePeople
 {
@@ -22,25 +17,44 @@ namespace SerializePeople
         public void Serialize(string outputFile)
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            PropertyInfo[] properties = typeof(Person).GetProperties();
-            Dictionary<string, object> personMap = new Dictionary<string, object>();
-            foreach (PropertyInfo property in properties)
-            {
-                personMap[property.Name] = property.GetValue(this);
-            }
             if (File.Exists(outputFile))
                 File.Delete(outputFile);
             using (FileStream stream = new FileStream(outputFile, FileMode.Create))
             {
                 try
                 {
-                    formatter.Serialize(stream, personMap);
+                    formatter.Serialize(stream, this);
                 }
                 catch (SerializationException e)
                 {
                     Console.WriteLine($"Failed to serialize due to: {e.Message}");
                 }
             }
+        }
+
+        public static Person Deserialize(string sourceFile)
+        {
+            Person person = new Person();
+            BinaryFormatter formatter = new BinaryFormatter();
+            try
+            {
+                using (FileStream stream = new FileStream(sourceFile, FileMode.Open))
+                {
+                    try
+                    {
+                        person = (Person) formatter.Deserialize(stream);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine($"Failed to deserialize due to: {e.Message}");
+                    }
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File not found.");
+            }
+            return person;
         }
 
         public override string ToString()
