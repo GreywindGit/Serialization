@@ -8,11 +8,19 @@ namespace SerializePeople
     [Serializable]
     class Person
     {
+        private int age;
         public enum Genders { Male, Female }
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
         public Genders Gender { get; set; }
-        public int Age => DateTime.Now.Year - BirthDate.Year;
+
+        public Person(string name = "", Genders gender = Genders.Female, DateTime birthDate = new DateTime())
+        {
+            this.Name = name;
+            this.Gender = gender;
+            this.BirthDate = birthDate;
+            this.age = DateTime.Now.Year - BirthDate.Year;
+        }
 
         public void Serialize(string outputFile)
         {
@@ -59,7 +67,7 @@ namespace SerializePeople
 
         public override string ToString()
         {
-            return $"Name: {Name}, Gender: {Gender}, Date of Birth: {BirthDate.ToString("yyyy.MM.dd")}, Age: {Age}";
+            return $"Name: {Name}, Gender: {Gender}, Date of Birth: {BirthDate.ToString("yyyy.MM.dd")}, Age: {age}";
         }
     }
 }
